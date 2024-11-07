@@ -39,3 +39,14 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
+
+//const express = require('express');
+//const app = express();
+const discoveriesRouter = require('./discoveries');  // Import the new route file
+
+app.set('view engine', 'pug');
+app.use('/discoveries', discoveriesRouter); 
+
+app.listen(3000, () => {
+  console.log('Server is running on http://localhost:3000');
+});
