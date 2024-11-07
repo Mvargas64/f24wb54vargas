@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  h1= title
+
+  //- Display the grid based on query parameters
+  if query.rows && query.cols
+    .container-fluid
+      .row
+        each row in range(query.rows)
+          .col-sm-1
+            each col in range(query.cols)
+              div.col #{row + 1}, #{col + 1}
+  else
+    p No grid parameters provided.
