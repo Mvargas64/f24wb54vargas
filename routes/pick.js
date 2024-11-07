@@ -1,13 +1,8 @@
 const express = require('express');
-const app = express();
-const path = require('path');
+const router = express.Router();  // Create a router, not a new express app
 
-// Set view engine to Pug
-app.set('view engine', 'pug');
-app.set('views', path.join(__dirname, 'views'));
-
-// New endpoint for the random item page
-app.get('/randomitem', (req, res) => {
+// Define the endpoint for the random item page
+router.get('/', (req, res) => {
   const imageNames = [
     'Ai.jpg',
     'deep_Sea.jpg',
@@ -19,7 +14,4 @@ app.get('/randomitem', (req, res) => {
   res.render('randomitem', { image_names: imageNames });
 });
 
-// Listen on a port
-app.listen(3000, () => {
-  console.log('Server started on http://localhost:3000');
-});
+module.exports = router;  // Export the router for use in app.js

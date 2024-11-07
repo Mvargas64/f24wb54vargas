@@ -7,7 +7,9 @@ var logger = require('morgan');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 const discoveriesRouter = require('./routes/discoveries');  // Path to your discoveries route
+const randomitemRouter = require('./routes/pick');
 var gridRouter = require('./routes/grid');
+
 
 var app = express();
 
@@ -21,7 +23,11 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the discoveries route before the 404 error handler
+
+// Use the randomitem route 
+app.use('/randomitem', randomitemRouter);
+
+// Use the discoveries route 
 app.use('/discoveries', discoveriesRouter);
 
 app.use('/', indexRouter);

@@ -3,10 +3,10 @@ extends layout
 block content
   h1= title
   p Welcome to LAB 10 page
-  button(type="button",onclick="boost()", class="btn btn-secondary") Sample Button
-  
+  button(type="button", onclick="boost()", class="btn btn-secondary") Sample Button
 
-  div#boost add in extra
+  div#boost
+    p Add in extra
 
     script.
       let value = 0;
@@ -17,6 +17,5 @@ block content
         value += amt;
         document.getElementById("boost").textContent = `Boosted ${amt} by ${value}`;
       }
-    
-a(href='/discoveries') View Discoveries
-
+  
+  a(href='/discoveries') View Discoveries
