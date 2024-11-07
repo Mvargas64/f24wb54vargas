@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+const discoveriesRouter = require('./routes/discoveries');  // Path to your discoveries route
 
 var app = express();
 
@@ -18,6 +19,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+// Use the discoveries route before the 404 error handler
+app.use('/discoveries', discoveriesRouter);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
@@ -39,14 +43,3 @@ app.use(function(err, req, res, next) {
 });
 
 module.exports = app;
-
-//const express = require('express');
-//const app = express();
-const discoveriesRouter = require('./routes/discoveries');// Import the new route file
-
-app.set('view engine', 'pug');
-app.use('/discoveries', discoveriesRouter); 
-
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
-});
