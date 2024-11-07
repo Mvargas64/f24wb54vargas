@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h1 A random item
+
+  //- Iterate over the image_names array and display 3 random images
+  - var image_names = image_names || []
+
+  //- Generate 3 random images
+  - for (let i = 0; i < 3; i++) {
+    - var randomIndex = Math.floor(Math.random() * 5)
+    img(
+      src=`/images/${image_names[randomIndex]}`
+      alt=`Random Image ${i + 1}`
+      height='300'
+      width='300'
+    )
+  }
