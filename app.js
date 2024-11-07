@@ -42,7 +42,7 @@ module.exports = app;
 
 //const express = require('express');
 //const app = express();
-const discoveriesRouter = require('./discoveries');  // Import the new route file
+const discoveriesRouter = require('./routes/discoveries');// Import the new route file
 
 app.set('view engine', 'pug');
 app.use('/discoveries', discoveriesRouter); 
