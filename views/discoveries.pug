@@ -6,4 +6,18 @@ block content
   head
     title Search Results - Discoveries
   body
-    div#results-container
+
+    //- Check if results are available and display them
+    if results && results.length > 0
+      .container-fluid
+        .row
+          each result in results
+            .col-sm-2
+              h3 #{result.name}
+              p #{result.description}
+              small Year: #{result.year}
+    else
+      p No discoveries found.
+
+    // Add a link to the discoveries page
+    a(href='/discoveries') Go back to Discoveries
