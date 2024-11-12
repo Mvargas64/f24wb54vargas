@@ -6,14 +6,17 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 
+// Import routes
 const indexRouter = require('./routes/index');
 const usersRouter = require('./routes/users');
-const discoveriesRouter = require('./routes/discoveries');  // Path to your discoveries route
+const discoveriesRouter = require('./routes/discoveries');
 const randomitemRouter = require('./routes/pick');
 const gridRouter = require('./routes/grid');
+const resourceRouter = require('./routes/resource'); 
 
+// Import mongoose and Costume model
 const mongoose = require('mongoose');
-const Costume = require('./models/costume'); // Import your Costume model once
+const Costume = require('./models/costume');
 
 // Function to recreate the database and seed initial data
 async function recreateDB() {
@@ -60,9 +63,19 @@ db.once('open', function () {
   if (reseed) { recreateDB(); }
 });
 
-const app = express();
+// Create the express app instance
+var app = express();
 
-// view engine setup
+// Import the controller for the API information
+const apiController = require('./controllers/api');
+
+// Add a new route for the API information after the app is created
+app.use('/api', apiController.api);
+
+// Use the costume routes (Resource Routes)
+app.use('/costumes', resourceRouter);  // Register the resource routes here
+
+// View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
@@ -92,4 +105,5 @@ app.use(function(err, req, res, next) {
   res.render('error');
 });
 
+// Export the app for use in other files
 module.exports = app;
