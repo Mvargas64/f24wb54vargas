@@ -12,16 +12,7 @@ const discoveriesRouter = require('./routes/discoveries');  // Path to your disc
 const randomitemRouter = require('./routes/pick');
 var gridRouter = require('./routes/grid');
 
-require('dotenv').config();
-const connectionString = process.env.MONGO_CON
-mongoose = require('mongoose');
-mongoose.connect(connectionString);
-
-var app = express();
-
-
 const mongoose = require('mongoose');
-require('dotenv').config();
 
 // Connect to MongoDB using the connection string from .env
 mongoose.connect(process.env.MONGO_CON, {
@@ -40,6 +31,8 @@ db.once('open', function () {
   console.log('Connection to DB succeeded');
 });
 
+var app = express();
+
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -50,7 +43,6 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-
 // Use the randomitem route 
 app.use('/randomitem', randomitemRouter);
 
@@ -60,7 +52,6 @@ app.use('/discoveries', discoveriesRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
