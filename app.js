@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -10,8 +12,33 @@ const discoveriesRouter = require('./routes/discoveries');  // Path to your disc
 const randomitemRouter = require('./routes/pick');
 var gridRouter = require('./routes/grid');
 
+require('dotenv').config();
+const connectionString = process.env.MONGO_CON
+mongoose = require('mongoose');
+mongoose.connect(connectionString);
 
 var app = express();
+
+
+const mongoose = require('mongoose');
+require('dotenv').config();
+
+// Connect to MongoDB using the connection string from .env
+mongoose.connect(process.env.MONGO_CON, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+});
+
+// Get the default connection
+const db = mongoose.connection;
+
+// Bind connection to error event (to get notification of connection errors)
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
+// When the connection is successful
+db.once('open', function () {
+  console.log('Connection to DB succeeded');
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
