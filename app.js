@@ -12,6 +12,8 @@ const discoveriesRouter = require('./routes/discoveries');  // Path to your disc
 const randomitemRouter = require('./routes/pick');
 var gridRouter = require('./routes/grid');
 
+var Costume = require("./models/costume");
+
 const mongoose = require('mongoose');
 
 // Connect to MongoDB using the connection string from .env
