@@ -1,20 +1,43 @@
 require('dotenv').config();
 
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 
-var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
 const discoveriesRouter = require('./routes/discoveries');  // Path to your discoveries route
 const randomitemRouter = require('./routes/pick');
-var gridRouter = require('./routes/grid');
-
-var Costume = require("./models/costume");
+const gridRouter = require('./routes/grid');
 
 const mongoose = require('mongoose');
+const Costume = require('./models/costume'); // Import your Costume model once
+
+// Function to recreate the database and seed initial data
+async function recreateDB() {
+  try {
+    await Costume.deleteMany();
+    console.log("Collection cleared");
+
+    let instance1 = new Costume({ costume_type: "ghost", size: 'large', cost: 15.4 });
+    let instance2 = new Costume({ costume_type: "vampire", size: 'medium', cost: 20.5 });
+    let instance3 = new Costume({ costume_type: "witch", size: 'small', cost: 25.0 });
+
+    await instance1.save();
+    console.log("First object saved");
+
+    await instance2.save();
+    console.log("Second object saved");
+
+    await instance3.save();
+    console.log("Third object saved");
+
+  } catch (err) {
+    console.error("Error seeding database:", err);
+  }
+}
 
 // Connect to MongoDB using the connection string from .env
 mongoose.connect(process.env.MONGO_CON, {
@@ -31,9 +54,13 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // When the connection is successful
 db.once('open', function () {
   console.log('Connection to DB succeeded');
+
+  // Seed database if `reseed` is true
+  let reseed = true;
+  if (reseed) { recreateDB(); }
 });
 
-var app = express();
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -45,12 +72,9 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Use the randomitem route 
+// Route setup
 app.use('/randomitem', randomitemRouter);
-
-// Use the discoveries route 
 app.use('/discoveries', discoveriesRouter);
-
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
@@ -62,11 +86,8 @@ app.use(function(req, res, next) {
 
 // error handler
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
   res.status(err.status || 500);
   res.render('error');
 });
