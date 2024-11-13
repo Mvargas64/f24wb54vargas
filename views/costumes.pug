@@ -1,0 +1,13 @@
+extends layout
+
+block content
+  h1= title
+
+  if results.length > 0
+    ul
+      each costume in results
+        li
+          strong= costume.costume_type
+          | , Size: #{costume.size}, Cost: $#{costume.cost}
+  else
+    p No costumes found.

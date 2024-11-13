@@ -7,7 +7,6 @@ var costume_controller = require('../controllers/costume');
 /// API ROUTE ///
 // GET resources base.
 router.get('/', api_controller.api);
-
 /// COSTUME ROUTES ///
 // POST request for creating a Costume.
 router.post('/costumes', costume_controller.costume_create_post);
@@ -17,7 +16,8 @@ router.delete('/costumes/:id', costume_controller.costume_delete);
 router.put('/costumes/:id', costume_controller.costume_update_put);
 // GET request for one Costume.
 router.get('/costumes/:id', costume_controller.costume_detail);
-// GET request for list of all Costume items and show them in a view.
-router.get('/costumes', costume_controller.costume_view_all_Page);  // This is the correct route
+// GET request for list of all Costume items.
+// In routes/resource.js
+router.get('/mario', costume_controller.costume_view_all_Page); 
 
 module.exports = router;

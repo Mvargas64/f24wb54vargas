@@ -1,14 +1,10 @@
 var Costume = require('../models/costume');
 
-// List of all Costumes (properly implemented)
-exports.costume_list = async function(req, res) {
+// List of all Costumes
+exports.costume_view_all_Page = async function(req, res) {
     try {
-        // Fetch all costumes from the database
         const theCostumes = await Costume.find();
-        
-    // Render the 'costumes' view with the fetched costumes
-    res.render('costumes', { title: 'Costume Search Results', results: theCostumes });
-
+        res.render('costumes', { title: 'Costume Search Results', results: theCostumes });
     } catch (err) {
         res.status(500);
         res.send(`{"error": ${err}}`);
