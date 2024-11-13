@@ -12,7 +12,7 @@ const usersRouter = require('./routes/users');
 const discoveriesRouter = require('./routes/discoveries');
 const randomitemRouter = require('./routes/pick');
 const gridRouter = require('./routes/grid');
-const resourceRouter = require('./routes/resource'); 
+const resourceRouter = require('./routes/resource');
 
 // Import mongoose and Costume model
 const mongoose = require('mongoose');
@@ -57,14 +57,22 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 // When the connection is successful
 db.once('open', function () {
   console.log('Connection to DB succeeded');
-
-  // Seed database if `reseed` is true
+  
   let reseed = true;
-  if (reseed) { recreateDB(); }
+  if (reseed) { 
+    recreateDB(); 
+  }
 });
 
 // Create the express app instance
 var app = express();
+
+// Middleware to parse JSON body
+app.use(logger('dev'));
+app.use(express.json());  // Ensures JSON body is parsed correctly
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Import the controller for the API information
 const apiController = require('./controllers/api');
@@ -73,17 +81,11 @@ const apiController = require('./controllers/api');
 app.use('/api', apiController.api);
 
 // Use the costume routes (Resource Routes)
-app.use('/', resourceRouter); 
+app.use('/', resourceRouter);  // Using the resourceRouter for costume routes
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
-
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 // Route setup
 app.use('/randomitem', randomitemRouter);
@@ -91,7 +93,6 @@ app.use('/discoveries', discoveriesRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
-
 
 // Start the server on port 3000
 app.listen(3000, () => {
