@@ -1,49 +1,36 @@
-// controllers/costume.js
 var Costume = require('../models/costume');
 
-// List of all Costumes
-exports.costume_list = function(req, res) {
-  res.send('NOT IMPLEMENTED: Costume list');
+// List of all Costumes (properly implemented)
+exports.costume_list = async function(req, res) {
+    try {
+        // Fetch all costumes from the database
+        const theCostumes = await Costume.find();
+        
+    // Render the 'costumes' view with the fetched costumes
+    res.render('costumes', { title: 'Costume Search Results', results: theCostumes });
+
+    } catch (err) {
+        res.status(500);
+        res.send(`{"error": ${err}}`);
+    }
 };
 
 // Details of a specific Costume
 exports.costume_detail = function(req, res) {
-  res.send('NOT IMPLEMENTED: Costume detail: ' + req.params.id);
+    res.send('NOT IMPLEMENTED: Costume detail: ' + req.params.id);
 };
 
 // Handle Costume creation on POST
 exports.costume_create_post = function(req, res) {
-  res.send('NOT IMPLEMENTED: Costume create POST');
+    res.send('NOT IMPLEMENTED: Costume create POST');
 };
 
 // Handle Costume deletion on DELETE
 exports.costume_delete = function(req, res) {
-  res.send('NOT IMPLEMENTED: Costume delete DELETE ' + req.params.id);
+    res.send('NOT IMPLEMENTED: Costume delete DELETE ' + req.params.id);
 };
 
 // Handle Costume update on PUT
 exports.costume_update_put = function(req, res) {
-  res.send('NOT IMPLEMENTED: Costume update PUT ' + req.params.id);
+    res.send('NOT IMPLEMENTED: Costume update PUT ' + req.params.id);
 };
-
-// Optional: Seed the database (recreate) if necessary
-async function recreateDB() {
-  // Delete all existing records
-  await Costume.deleteMany();
-
-  // Create a new instance of the costume model
-  let instance1 = new Costume({ costume_type: "ghost", size: 'large', cost: 15.4 });
-
-  // Save the new instance and log success
-  instance1.save().then(doc => {
-    console.log("First object saved");
-  }).catch(err => {
-    console.error(err);
-  });
-}
-
-// Optionally, reseed the database on server start
-let reseed = true;
-if (reseed) {
-  recreateDB();
-}

@@ -73,7 +73,7 @@ const apiController = require('./controllers/api');
 app.use('/api', apiController.api);
 
 // Use the costume routes (Resource Routes)
-app.use('/costumes', resourceRouter);  // Register the resource routes here
+app.use('/resource', resourceRouter);  // Register the resource routes here
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -91,6 +91,12 @@ app.use('/discoveries', discoveriesRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
+
+
+// Start the server on port 3000
+app.listen(3000, () => {
+  console.log("Server is running on http://localhost:3000");
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
