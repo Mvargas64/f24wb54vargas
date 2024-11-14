@@ -9,7 +9,7 @@ var costume_controller = require('../controllers/costume');
 router.get('/', api_controller.api);
 /// COSTUME ROUTES ///
 // POST request for creating a Costume.
-router.post('/resource/costumes', costume_controller.costume_create_post);
+router.post('/costumes', costume_controller.costume_create_post);
 // DELETE request to delete Costume.
 router.delete('/costumes/:id', costume_controller.costume_delete);
 // PUT request to update Costume.
