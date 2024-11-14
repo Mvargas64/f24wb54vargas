@@ -81,7 +81,7 @@ const apiController = require('./controllers/api');
 app.use('/api', apiController.api);
 
 // Use the costume routes (Resource Routes)
-app.use('/', resourceRouter);  // Using the resourceRouter for costume routes
+app.use('/resource', resourceRouter);  // Using the resourceRouter for costume routes
 
 // View engine setup
 app.set('views', path.join(__dirname, 'views'));
