@@ -1,0 +1,52 @@
+extends layout
+
+block content
+  h1= title
+  - let costumeid = toShow._id
+  - let costume_type = toShow.costume_type
+  - let costumecost = toShow.cost
+  - let costumesize = toShow.size
+
+  div.row(class='mb-2')
+    div.mr-1 ID is
+    div #{costumeid}
+
+  - let actionid = "/resource/costumes/" + costumeid
+  form(id='CostumeForm', action=actionid, method="PUT")
+    div.form-group
+      label.costumeAttr(for='costume_type') Costume type
+      input#costume_type(type='text', name='costume_type', value=costume_type)
+    div.form-group
+      label.costumeAttr(for='size') Costume size
+      input#size(type='text', name='size', value=costumesize)
+    div.form-group
+      label.costumeAttr(for='cost') Costume cost
+      input#cost(type='number', name='cost', value=costumecost)
+    input(type="submit")
+
+  script.
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('CostumeForm');
+      if (form) {
+        form.addEventListener('submit', (event) => {
+          event.preventDefault();
+          // Optionally show a loading indicator
+          fetch(form.action, {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(new FormData(form)) // event.target is the form
+          })
+            .then((resp) => resp.json()) // or resp.text(), depending on your API
+            .then((body) => {
+              alert('Update succeeded');
+              console.log(body); // Debugging: show server response
+            })
+            .catch((error) => {
+              alert('Update failed: ' + error);
+              console.error(error); // Debugging: log error details
+            });
+        });
+      }
+    });
