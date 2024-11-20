@@ -10,8 +10,10 @@ block content
     - let costumecost = toShow.cost
     - let costumesize = toShow.size
     - let actionid = "/resource/costumes/" + costumeid
+
     script.
       let actionid = "#{actionid}";
+
     div
       div.row
         div(class='costumeAttr mr-3') Costume ID is:
@@ -25,29 +27,27 @@ block content
       div.row
         div(class='costumeAttr mr-3') Costume Cost is:
         div #{costumecost}
-    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete
-    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel
+      
+      button(class="btn btn-danger m-2" onclick="deleteOnid()" aria-label="Delete Costume") Delete
+      button(class="btn btn-secondary m-2" onclick="cancel()" aria-label="Cancel Deletion") Cancel
 
-  script.
-    function cancel() {
-      // Go back to the home page for the costume collection
-      window.location.href = '/costumes';
-    }
-
-  script.
-    function deleteOnid() {
-      console.log("starting delete");
-      // delete first
-      fetch("#{actionid}", {
-        method: 'DELETE',
-      }).then((resp) => {
-        return resp.json(); // or resp.text() or whatever the server sends
-      }).then((body) => {
-        alert("Delete succeeded");
-        window.location.href = '/costumes';
-        // TODO handle body
-      }).catch((error) => {
-        // TODO handle error
-        alert("Delete failed " + error);
-      });
-    }
+    script.
+      function cancel() {
+        // Go back to the home page for the costume collection
+        window.location.href = '/resource/costumes';
+      }
+      
+      function deleteOnid() {
+        console.log("Starting delete");
+        fetch(actionid, {
+          method: 'DELETE'
+        }).then((resp) => {
+          if (!resp.ok) throw new Error("Delete failed with status: " + resp.status);
+          return resp.json();
+        }).then((body) => {
+          alert("Delete succeeded");
+          window.location.href = '/resource/costumes';
+        }).catch((error) => {
+          alert("Delete failed: " + error.message);
+        });
+      }

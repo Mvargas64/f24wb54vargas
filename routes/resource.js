@@ -18,7 +18,7 @@ router.put('/costumes/:id', costume_controller.costume_update_put);
 router.get('/costumes/:id', costume_controller.costume_detail);
 // GET request for list of all Costume items.
 // In routes/resource.js
-router.get('/mario', costume_controller.costume_view_all_Page); 
+router.get('/costumes', costume_controller.costume_view_all_Page); 
 
 /* GET detail costume page */
 router.get('/detail', costume_controller.costume_view_one_Page);
@@ -31,6 +31,10 @@ router.get('/update', costume_controller.costume_update_Page);
 
 /* GET delete costume page */
 router.get('/delete', costume_controller.costume_delete_Page);
+
+/* DELETE costume by id */
+router.delete('/:id', costume_controller.costume_delete);
+
 
 
 
