@@ -4,10 +4,12 @@ block content
   h1= title
 
   if results.length > 0
-    ul
-      each costume in results
-        li
-          strong= costume.costume_type
-          | , Size: #{costume.size}, Cost: $#{costume.cost}
+    div.container-fluid
+      div.row.m-1
+        each costume in results
+          - let destination = `/resource/costume/update?id=${costume._id}`
+          div.row-sm-2.m-1
+            | Item #{costume.costume_type} (#{costume.size}) is $#{costume.cost}    
+            button.btn.btn-primary.ml-1(onclick=`window.location.href='${destination}'`) Update
   else
     p No costumes found.

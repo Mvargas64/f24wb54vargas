@@ -19,8 +19,9 @@ const mongoose = require('mongoose');
 const Costume = require('./models/costume');
 
 // Function to recreate the database and seed initial data
+
 async function recreateDB() {
-  try {
+ /* try {
     await Costume.deleteMany();
     console.log("Collection cleared");
 
@@ -40,7 +41,9 @@ async function recreateDB() {
   } catch (err) {
     console.error("Error seeding database:", err);
   }
+    */
 }
+
 
 // Connect to MongoDB using the connection string from .env
 mongoose.connect(process.env.MONGO_CON, {
@@ -58,11 +61,32 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 db.once('open', function () {
   console.log('Connection to DB succeeded');
   
-  let reseed = true;
+  let reseed = false;
   if (reseed) { 
     recreateDB(); 
   }
 });
+
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+passport.use(new LocalStrategy(
+  async function(username, password, done) {
+    try {
+      const user = await Account.findOne({ username: username });
+      if (!user) {
+        return done(null, false, { message: 'Incorrect username.' });
+      }
+      if (!user.validPassword(password)) {
+        return done(null, false, { message: 'Incorrect password.' });
+      }
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }
+));
+
 
 // Create the express app instance
 var app = express();
@@ -72,6 +96,14 @@ app.use(logger('dev'));
 app.use(express.json());  // Ensures JSON body is parsed correctly
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+  }));
+  app.use(passport.initialize());
+  app.use(passport.session());
+  
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Import the controller for the API information
@@ -93,6 +125,14 @@ app.use('/discoveries', discoveriesRouter);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/grid', gridRouter);
+
+// passport config
+// Use the existing connection
+// The Account model
+var Account =require('./models/account.js');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 //Start the server on port 3000
 app.listen(3000, () => {

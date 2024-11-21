@@ -11,7 +11,7 @@ block content
     div.mr-1 ID is
     div #{costumeid}
 
-  - let actionid = "/resource/costumes/" + costumeid
+  - let actionid = "/resource/costume/" + costumeid
   form(id='CostumeForm', action=actionid, method="PUT")
     div.form-group
       label.costumeAttr(for='costume_type') Costume type

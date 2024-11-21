@@ -12,25 +12,28 @@ router.get('/', api_controller.api);
 router.post('/costumes', costume_controller.costume_create_post);
 // DELETE request to delete Costume.
 router.delete('/costumes/:id', costume_controller.costume_delete);
+
 // PUT request to update Costume.
 router.put('/costumes/:id', costume_controller.costume_update_put);
+
 // GET request for one Costume.
 router.get('/costumes/:id', costume_controller.costume_detail);
+
 // GET request for list of all Costume items.
 // In routes/resource.js
 router.get('/costumes', costume_controller.costume_view_all_Page); 
 
 /* GET detail costume page */
-router.get('/detail', costume_controller.costume_view_one_Page);
+router.get('/costume/detail', costume_controller.costume_view_one_Page);
 
 /* GET create costume page */
-router.get('/create', costume_controller.costume_create_Page);
+router.get('/costume/create', costume_controller.costume_create_Page);
 
 /* GET create update page */
-router.get('/update', costume_controller.costume_update_Page);
+router.get('/costume/update', costume_controller.costume_update_Page);
 
 /* GET delete costume page */
-router.get('/delete', costume_controller.costume_delete_Page);
+router.get('/costume/delete', costume_controller.costume_delete_Page);
 
 /* DELETE costume by id */
 router.delete('/:id', costume_controller.costume_delete);
