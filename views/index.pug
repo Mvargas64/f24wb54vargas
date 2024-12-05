@@ -3,6 +3,22 @@ extends layout
 block content
   h1= title
   p Welcome to LAB 10 page
+
+  // If the user is not logged in, show login and register links
+  if (!user)
+    a(href="/login") Login
+    br
+    a(href="/register") Register
+
+  // If the user is logged in, show user info and additional navigation
+  if (user)
+    p You are currently logged in as #{user.username}
+    a(href="/resource/costumes") Take me to costumes
+    <br>
+    a(href="/logout") Logout
+
+  // Optional: Additional content such as a sample button and script for boosting
+  <br>
   button(type="button", onclick="boost()", class="btn btn-secondary") Sample Button
 
   div#boost
@@ -17,5 +33,6 @@ block content
         value += amt;
         document.getElementById("boost").textContent = `Boosted ${amt} by ${value}`;
       }
-  
+
+  // Link to discoveries page
   a(href='/discoveries') View Discoveries
