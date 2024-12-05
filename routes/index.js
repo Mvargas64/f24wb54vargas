@@ -5,6 +5,7 @@ var Account = require('../models/account');
 var costume_controller = require('../controllers/costume');
 
 
+
 // Index Route
 router.get('/', function (req, res) {
   res.render('index', { title: 'Costume App', user: req.user });
@@ -75,18 +76,7 @@ router.post('/login', passport.authenticate('local'), function(req, res) {
   }
 });
 
-// Middleware to check for an authenticated user
-const secured = (req, res, next) => {
-  if (req.user) {
-    // User is authenticated; proceed to the next middleware or route handler
-    return next();
-  }
-  // User is not authenticated; redirect to the login page
-  res.redirect("/login");
-};
 
-/* GET update costume page */
-router.get('/resource/costume/update', secured, costume_controller.costume_update_Page);
 
 // Logout Route
 router.get('/logout', function(req, res) {

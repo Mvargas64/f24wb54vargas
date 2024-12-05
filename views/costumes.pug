@@ -3,13 +3,21 @@ extends layout
 block content
   h1= title
 
+  // Button to go to the create page
+  div.container.text-center.mb-3
+    button.btn.btn-success(onclick="window.location.href='/resource/costume/create'") Add New Costume
+
   if results.length > 0
     div.container-fluid
       div.row.m-1
         each costume in results
-          - let destination = `/resource/costume/update?id=${costume._id}`
+          - let updateDestination = `/resource/costume/update?id=${costume._id}`
+          - let detailDestination = `/resource/costume/detail?id=${costume._id}`
+          - let deleteDestination = `/resource/costume/delete?id=${costume._id}`
           div.row-sm-2.m-1
-            | Item #{costume.costume_type} (#{costume.size}) is $#{costume.cost}    
-            button.btn.btn-primary.ml-1(onclick=`window.location.href='${destination}'`) Update
+            | Item #{costume.costume_type} (#{costume.size}) is $#{costume.cost}
+            button.btn.btn-primary.ml-1(onclick=`window.location.href='${updateDestination}'`) Update
+            button.btn.btn-info.ml-1(onclick=`window.location.href='${detailDestination}'`) View Details
+            button.btn.btn-danger.ml-1(onclick=`window.location.href='${deleteDestination}'`) Delete
   else
     p No costumes found.

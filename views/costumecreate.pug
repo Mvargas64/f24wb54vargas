@@ -2,31 +2,85 @@ extends layout
 
 block content
   h1= title
-  form(id='CostumeForm', action="/resource/costumes", method="POST")
+  form(id='CostumeForm', action="/resource/costumes", method="POST", novalidate)
     div.form-group
       label.costumeAttr(for='costume_type') Costume type
-      input#costume_type(type='text', name='costume_type')
+      input#costume_type(type='text', name='costume_type', required, minlength="3", maxlength="50")
+      small.text-danger.hidden Please enter a valid costume type (3-50 characters).
     div.form-group
       label.costumeAttr(for='size') Costume size
-      input#size(type='text', name='size')
+      select#size(name='size', required)
+        option(value='', disabled selected) Select size
+        option(value='small') Small
+        option(value='medium') Medium
+        option(value='large') Large
+      small.text-danger.hidden Please select a size.
     div.form-group
       label.costumeAttr(for='cost') Costume cost
-      input#cost(type='number', name='cost')
-    input(type="submit")
+      input#cost(type='number', name='cost', required, min="1", max="1000")
+      small.text-danger.hidden Please enter a cost between $1 and $1000.
+    input.btn.btn-primary(type="submit", value="Submit")
 
   script.
-    document.forms['CostumeForm'].addEventListener('submit', (event) => {
-      event.preventDefault();
-      fetch(event.target.action, {
-        method: 'POST',
-        body: new URLSearchParams(new FormData(event.target)) // event.target is the form
-      }).then((resp) => {
-        return resp.json(); // or resp.text() or whatever the server sends
-      }).then((body) => {
-        alert("Save succeeded");
-        // TODO: Handle the response body as needed
-      }).catch((error) => {
-        // TODO: Handle the error as needed
-        alert("Save failed: " + error);
+    document.addEventListener('DOMContentLoaded', () => {
+      const form = document.getElementById('CostumeForm');
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        let isValid = true;
+
+        // Validate costume_type
+        const costumeTypeInput = form.costume_type;
+        const costumeTypeError = costumeTypeInput.nextElementSibling;
+        if (!costumeTypeInput.checkValidity()) {
+          isValid = false;
+          costumeTypeError.classList.remove('hidden');
+        } else {
+          costumeTypeError.classList.add('hidden');
+        }
+
+        // Validate size
+        const sizeInput = form.size;
+        const sizeError = sizeInput.nextElementSibling;
+        if (!sizeInput.checkValidity()) {
+          isValid = false;
+          sizeError.classList.remove('hidden');
+        } else {
+          sizeError.classList.add('hidden');
+        }
+
+        // Validate cost
+        const costInput = form.cost;
+        const costError = costInput.nextElementSibling;
+        if (!costInput.checkValidity()) {
+          isValid = false;
+          costError.classList.remove('hidden');
+        } else {
+          costError.classList.add('hidden');
+        }
+
+        // If the form is valid, submit it
+        if (isValid) {
+          fetch(form.action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams(new FormData(form)),
+          })
+            .then((resp) => {
+              if (!resp.ok) {
+                throw new Error(`HTTP error! status: ${resp.status}`);
+              }
+              return resp.json();
+            })
+            .then((body) => {
+              alert('Save succeeded');
+              console.log(body);
+            })
+            .catch((error) => {
+              alert('Save failed: ' + error.message);
+              console.error(error);
+            });
+        }
       });
     });
